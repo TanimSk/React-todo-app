@@ -1,1 +1,1 @@
-export const BASE_URL = 'http://3.109.211.104:8001';
+export const BASE_URL = 'https://5nvfy5p7we.execute-api.ap-south-1.amazonaws.com/dev/';
