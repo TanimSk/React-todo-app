@@ -121,7 +121,7 @@ const MyTasks = () => {
                 (filters.priority ? task.priority === filters.priority : true)
         )
         .sort((a, b) => {
-            if (filters.sortBy === "creation") return new Date(a.createdAt) - new Date(b.createdAt);
+            if (filters.sortBy === "creation") return new Date(a.created_at) - new Date(b.created_at);
             if (filters.sortBy === "deadline") return new Date(a.deadline) - new Date(b.deadline);
             if (filters.sortBy === "priority") return a.priority - b.priority;
             return 0;
@@ -132,25 +132,27 @@ const MyTasks = () => {
         const { name, value } = event.target;
         console.log(name, value);
 
-        if (name === "sortBy" || name === "priority") {
+        if (name === "sortBy") {
             setFilters((prevFilters) => {
                 const sortedTasks = [...tasks].sort((a, b) => {
-                    if (value === "creation") return new Date(a.createdAt) - new Date(b.createdAt);
+                    if (value === "creation") return new Date(a.created_at) - new Date(b.created_at);
                     if (value === "deadline") return new Date(a.deadline) - new Date(b.deadline);
                     if (value === "priority") {
-                        const priorityOrder = { High: 1, Medium: 2, Low: 3 };
-                        return priorityOrder[a.priority] - priorityOrder[b.priority];
-                    }                    
+                        return Number(b.priority) - Number(a.priority);  // Sorting in descending order for priority (3 is high)
+                    }
                 });
 
                 if (value === "none") {
                     setTasks(rawTasks);
                     console.log("rawTasks", rawTasks);
+                } else {
+                    setTasks(sortedTasks);
                 }
-                else setTasks(sortedTasks);
+
                 return { ...prevFilters, [name]: value };
             });
         }
+
     };
 
 
@@ -189,13 +191,6 @@ const MyTasks = () => {
                         Sort Tasks:
                     </div>
                     <FormControl fullWidth>
-                        <Select name="priority" value={filters.priority} onChange={handleSorting} displayEmpty>
-                            <MenuItem value="" disabled>
-                                Sort by Priority
-                            </MenuItem>                            
-                        </Select>
-                    </FormControl>
-                    <FormControl fullWidth>
                         <Select name="sortBy" value={filters.sortBy} onChange={handleSorting} displayEmpty>
                             <MenuItem value="" disabled>
                                 Sort by Criteria
@@ -209,7 +204,9 @@ const MyTasks = () => {
                     <div>
                         Search Tasks:
                     </div>
-                    <TextField fullWidth label="Search Task" variant="outlined" name="searchQuery" value={filters.searchQuery} onChange={handleInputChange} />
+                    <TextField fullWidth label="Search Task" variant="outlined" name="searchQuery" value={filters.searchQuery} onChange={
+                        (e) => setFilters((prevFilters) => ({ ...prevFilters, searchQuery: e.target.value }))
+                    } />
                 </div>
 
                 {/* Task List */}
