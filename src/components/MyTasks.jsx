@@ -3,7 +3,7 @@ import { Button, TextField, List, ListItem, ListItemText, IconButton, MenuItem, 
 import { Close } from "@mui/icons-material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Countdown from "./Timer";
+import Timer from "./Timer";
 import { BASE_URL } from "../constants";
 import bgImage from "../assets/bg.jpg";
 
@@ -26,19 +26,20 @@ const MyTasks = () => {
 
     // Fetch tasks from API on mount
     useEffect(() => {
-        const fetchTasks = async () => {
-            try {
-                const response = await fetch(`${BASE_URL}/todos`);
-                if (!response.ok) throw new Error("Failed to fetch tasks");
-                let data = await response.json();
-                setTasks(data);
-                setRawTasks(data);
-            } catch (error) {
-                console.error("Error fetching tasks:", error);
-            }
-        };
         fetchTasks();
     }, []);
+
+    const fetchTasks = async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/todos`);
+            if (!response.ok) throw new Error("Failed to fetch tasks");
+            let data = await response.json();
+            setTasks(data);
+            setRawTasks(data);
+        } catch (error) {
+            console.error("Error fetching tasks:", error);
+        }
+    };
 
     // Handle input change for both taskData & filters
     const handleInputChange = (e) => {
@@ -95,6 +96,7 @@ const MyTasks = () => {
             if (!response.ok) throw new Error("Error updating task");
 
             setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, is_completed: !t.is_completed } : t)));
+            fetchTasks();
         } catch (error) {
             console.error("Error toggling task:", error);
         }
@@ -123,7 +125,7 @@ const MyTasks = () => {
         .sort((a, b) => {
             if (filters.sortBy === "creation") return new Date(a.created_at) - new Date(b.created_at);
             if (filters.sortBy === "deadline") return new Date(a.deadline) - new Date(b.deadline);
-            if (filters.sortBy === "priority") return a.priority - b.priority;
+            if (filters.sortBy === "priority") return Number(a.priority) > Number(b.priority);
             return 0;
         });
 
@@ -138,7 +140,7 @@ const MyTasks = () => {
                     if (value === "creation") return new Date(a.created_at) - new Date(b.created_at);
                     if (value === "deadline") return new Date(a.deadline) - new Date(b.deadline);
                     if (value === "priority") {
-                        return Number(b.priority) - Number(a.priority);  // Sorting in descending order for priority (3 is high)
+                        return Number(a.priority) > Number(b.priority);  // Sorting in descending order for priority (3 is high)
                     }
                 });
 
@@ -215,12 +217,12 @@ const MyTasks = () => {
                         <ListItem
                             title={description}
                             key={id}
-                            className={`p-2 mb-1 flex items-center justify-between rounded-md shadow-sm border ${is_completed ? "bg-green-100" : "bg-white"}`}
+                            className={`p-2 mb-1 flex items-center justify-between rounded-md shadow-sm border ${is_completed ? "bg-green-50" : "bg-white"} max-sm:flex-col`}
                         >
                             {/* Left Side: Task Title & Priority */}
                             <div className="flex items-center gap-3 w-full">
                                 <Checkbox checked={is_completed} onChange={() => handleToggleTask(id)} color="success" size="small" />
-                                <div>
+                                <div className="max-sm:grow-[2] max-sm:text-center max-sm:mb-4 max-sm:mr-[5rem]">
                                     <span className="text-lg font-medium">{title}</span>
                                     <br />
                                     <span className="text-xs text-gray-500">
@@ -240,9 +242,16 @@ const MyTasks = () => {
                                 </div>
                             </div>
 
+                            {
+                                is_completed ? <div className="text-md text-lime-700 mr-5">Completed!</div> : null
+                            }
+
                             {/* Right Side: Actions */}
                             <div className="flex items-center gap-2">
-                                {!is_completed && <Countdown deadline={deadline} />}
+                                {
+                                    !is_completed ? <Timer deadline={deadline} /> : null
+                                }
+
                                 <IconButton color="error" onClick={() => handleDeleteTask(id)} size="small" title="Delete Task">
                                     <Close fontSize="small" />
                                 </IconButton>

@@ -21,25 +21,34 @@ const Timer = ({ deadline }) => {
 
     return (
         <div className="flex flex-col items-center space-y-3">
-            <h2 className="text-sm font-semibold text-gray-700 my-[0]">Time Remaining</h2>
-            <div className="flex space-x-4 p-1 bg-white shadow-md rounded-lg">
-                <div className="flex flex-col items-center">
-                    <span className="text-2xl font-bold">{days}</span>
-                    <span className="text-sm text-gray-500">Days</span>
-                </div>
-                <div className="flex flex-col items-center">
-                    <span className="text-2xl font-bold">{hours}</span>
-                    <span className="text-sm text-gray-500">Hours</span>
-                </div>
-                <div className="flex flex-col items-center">
-                    <span className="text-2xl font-bold">{minutes}</span>
-                    <span className="text-sm text-gray-500">Min</span>
-                </div>
-                <div className="flex flex-col items-center">
-                    <span className="text-2xl font-bold">{seconds}</span>
-                    <span className="text-sm text-gray-500">Sec</span>
-                </div>
-            </div>
+            {
+                timeLeft <= 0 ? (
+                    <div className="text-sm text-red-500 font-semibold w-[8rem] text-center">
+                        Time's up!
+                    </div>
+                ) :
+                    <>
+                        <h2 className="text-sm font-semibold text-gray-700 my-[0]">Time Remaining</h2>
+                        <div className="flex space-x-4 p-1 bg-white shadow-md rounded-lg">
+                            <div className="flex flex-col items-center">
+                                <span className="text-2xl font-bold">{days}</span>
+                                <span className="text-sm text-gray-500">Days</span>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="text-2xl font-bold">{hours}</span>
+                                <span className="text-sm text-gray-500">Hours</span>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="text-2xl font-bold">{minutes}</span>
+                                <span className="text-sm text-gray-500">Min</span>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="text-2xl font-bold">{seconds}</span>
+                                <span className="text-sm text-gray-500">Sec</span>
+                            </div>
+                        </div>
+                    </>
+            }
         </div>
     );
 };
