@@ -1,3 +1,5 @@
+Deplyed to: https://what-todo-now.netlify.app/
+<br>
 ### directory structure:
 <img width="416" alt="image" src="https://github.com/user-attachments/assets/3ebf0d19-4128-4ee1-b6a8-7c9c988d2cd4" />
 
