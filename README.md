@@ -1,8 +1,9 @@
-# React + Vite
+### directory structure:
+<img width="416" alt="image" src="https://github.com/user-attachments/assets/3ebf0d19-4128-4ee1-b6a8-7c9c988d2cd4" />
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### modules used:
+- Material UI
+- Tailwind CSS
+- react-toastify 
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/512679c8-1f7b-4c0b-9e44-c32ddeeac9ad" />
